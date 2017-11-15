@@ -9,10 +9,13 @@ export class Player {
     this.radiationAttacks = [];
     this.specialAttack = "";
     this.specialAttackTimer = 0;
-    this.inventory = ["stick", "stone"];
+    this.damage = 10;
+    this.currentEnemy = [];
+    this.inventory = [];
     this.experience = 0;
     this.level = 1;
     this.difficulty = 0;
+    this.gameWin = false;
   }
   typeChooser() {
     if(this.type === "Irradiated Gladior") {
@@ -35,7 +38,64 @@ export class Player {
       this.specialAttack = "Devil Deal - Halves your current health and the enemy's current health, restores all radiation";
     }
   }
-
+  encounter(difficulty) {
+    if(this.gameWin === true) {
+      return "You won the game";
+    }
+    const enemy = new Enemy(difficulty);
+    const encounterMessage = `You have encountered a ${enemy.name}`;
+    this.currentEnemy = [enemy, encounterMessage];
+  }
+  fight(playerSelection) {
+    if(playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
+      attack();
+    } else if (playerSelection === "Special Attack" && specialAttackTimer === 100) {
+      specialAttack();
+    } else if (playerSelection === "Item" && this.inventory.length != 0) {
+      item();
+    }
+  }
+  attack() {
+    this.currentEnemy[0].health -= this.level * 2;
+    this.stamina -= 10;
+    this.radiation -=10;
+    this.specialAttackTimer += 10;
+    if(this.currentEnemy[0].health <= 0) {
+      win();
+    }
+  }
+  specialAttack() {
+    this.currentEnemy[0].health -= this.level * 4;
+    this.specialAttackTimer = 0;
+  }
+  item() {
+    if(this.health < 80) {
+      this.health += 20;
+      this.inventory.splice(0,1);
+    } else {
+      this.health = 100;
+      this.inventory.splice(0,1);
+    }
+  }
+  win() {
+    if(this.currentEnemy[0].name === "...It's your evil twin") {
+      this.gameWin = true;
+    }
+    this.currentEnemy = [];
+    this.inventory += "potion";
+    if(this.type === "Irradiated Gladior") {
+      this.stamina = 100;
+      this.radiation = 100;
+    } else if (this.type === "Centaur Hunter") {
+      this.stamina = 150;
+      this.radiation = 50;
+    } else if (this.type === "Noxious Warlock") {
+      this.stamina = 50;
+      this.radiation = 150;
+    }
+    this.experience += this.difficulty * 10;
+    levelUp(this.level, this.experience);
+  }
   levelUp(level, experience) {
     const expCap = level*100;
     if(experience >= expCap && level < 50) {
@@ -45,15 +105,7 @@ export class Player {
       this.radiation += 10;
     }
   }
-
-  encounter(difficulty) {
-    const enemy = new Enemy(difficulty);
-    const encounterMessage = `You have encountered a ${enemy.name}`;
-    let result = [enemy, encounterMessage];
-    return (result);
-  }
 }
-
 export class Enemy {
   constructor(difficulty) {
     const enemies = ["Mutated Rat", "Raider", "Giant Cockroach", "Zombie", "Rabid Bunny", "Deathpaw", "John Cena Meme"];

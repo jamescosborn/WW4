@@ -1,4 +1,4 @@
-import { Player } from './../js/RPG.js';
+import { Player, Enemy } from './../js/RPG.js';
 
 describe('levelUp', function() {
   it('should not level up if experience does not meet threshold.', function() {
@@ -20,5 +20,20 @@ describe('typeChooser', function() {
     const player = new Player("Embrossia", "Irradiated Gladior");
     player.typeChooser();
     expect(player.type).toEqual("Irradiated Gladior");
+  });
+});
+describe('encounter', function() {
+  it('should select the correct class for player', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.encounter(40);
+    expect(player.currentEnemy[0].name).toEqual("Centaur");
+  });
+});
+describe('encounter', function() {
+  it('should select the correct class for player', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.encounter(49);
+    let enemy = player.currentEnemy[0].name;
+    expect(enemy).not.toEqual(undefined);
   });
 });

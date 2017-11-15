@@ -14,13 +14,15 @@
 |-|-|-|
 |Make Player Name|Embrossia|new player Embrossia|
 |Make Player Class|Irradiated Gladior|Embrossia - Irradiated Gladior|
-|Generate Random Enemies based on difficulty|level 99|Komodo Dragon Dragon|
-|Player can choose difficulty for next fight|level 1-9| level 1 enemy appears|
+|Generate Random Enemies based on difficulty|level 20|Komodo Dragon Dragon|
 |Player can attack enemy|use bash|enemy takes 10 damage|
 |Enemies die and reward exp|enemy dies|Player gets 10 exp|
 |Player can level up| gets 100 exp| levels up to level 2|
 |Enemy can attack player| ememy attacks| player takes 3 damage|
 |Player can die| enemy attacks for 100 damage| player dies and game over|
+|Player can use items| health potion| health restored|
+|Enemy can drop items| enemy dies| drop health potion|
+|Player can open inventory| collect item| Item added to inventory|
 
 ### Known Bugs
 
