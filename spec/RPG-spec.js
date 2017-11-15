@@ -23,17 +23,86 @@ describe('typeChooser', function() {
   });
 });
 describe('encounter', function() {
-  it('should select the correct class for player', function() {
+  it('Encounters a Boss', function() {
     const player = new Player("Embrossia", "Irradiated Gladior");
     player.encounter(40);
     expect(player.currentEnemy[0].name).toEqual("Centaur");
   });
 });
 describe('encounter', function() {
-  it('should select the correct class for player', function() {
+  it('Encounters a basic enemy at random', function() {
     const player = new Player("Embrossia", "Irradiated Gladior");
     player.encounter(49);
     let enemy = player.currentEnemy[0].name;
     expect(enemy).not.toEqual(undefined);
+  });
+});
+describe('fight', function() {
+  it('select attack successfully', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(player.difficulty);
+    player.fight("Attack");
+    expect(player.currentEnemy[0].health).toEqual(3);
+  });
+});
+describe('fight', function() {
+  it('select not attack successfully', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.encounter(1);
+    player.stamina = 0;
+    expect(player.fight("Attack")).toEqual("not a valid move");
+  });
+});
+describe('win', function() {
+  it('should win a fight', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(2);
+    player.currentEnemy[0].health = 1;
+    player.fight("Attack");
+    expect(player.experience).toEqual(10);
+  });
+});
+describe('special', function() {
+  it('should do double damage', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.specialAttackTimer = 100;
+    player.fight("Special Attack");
+    expect(player.currentEnemy[0].health).toEqual(1);
+  });
+});
+describe('inventory', function() {
+  it('should heal player fully', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.health = 80;
+    player.inventory = ["potion"];
+    player.fight("Item");
+    expect(player.health).toEqual(100);
+  });
+});
+describe('inventory', function() {
+  it('should heal player partially', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.health = 70;
+    player.inventory = ["potion"];
+    player.fight("Item");
+    expect(player.health).toEqual(90);
+  });
+});
+describe('inventory', function() {
+  it('should not heal the player', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.health = 70;
+    player.fight("Item");
+    expect(player.health).toEqual(70);
   });
 });

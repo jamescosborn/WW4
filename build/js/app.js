@@ -29,7 +29,7 @@ var Player = exports.Player = function () {
     this.inventory = [];
     this.experience = 0;
     this.level = 1;
-    this.difficulty = 0;
+    this.difficulty = 1;
     this.gameWin = false;
   }
 
@@ -70,11 +70,13 @@ var Player = exports.Player = function () {
     key: "fight",
     value: function fight(playerSelection) {
       if (playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
-        attack();
-      } else if (playerSelection === "Special Attack" && specialAttackTimer === 100) {
-        specialAttack();
+        this.attack();
+      } else if (playerSelection === "Special Attack" && this.specialAttackTimer === 100) {
+        this.special();
       } else if (playerSelection === "Item" && this.inventory.length != 0) {
-        item();
+        this.useItem();
+      } else {
+        return "not a valid move";
       }
     }
   }, {
@@ -85,18 +87,25 @@ var Player = exports.Player = function () {
       this.radiation -= 10;
       this.specialAttackTimer += 10;
       if (this.currentEnemy[0].health <= 0) {
-        win();
+        this.win();
+      } else {
+        this.damagePlayer();
       }
     }
   }, {
-    key: "specialAttack",
-    value: function specialAttack() {
+    key: "special",
+    value: function special() {
       this.currentEnemy[0].health -= this.level * 4;
       this.specialAttackTimer = 0;
+      if (this.currentEnemy[0].health <= 0) {
+        this.win();
+      } else {
+        this.damagePlayer();
+      }
     }
   }, {
-    key: "item",
-    value: function item() {
+    key: "useItem",
+    value: function useItem() {
       if (this.health < 80) {
         this.health += 20;
         this.inventory.splice(0, 1);
@@ -104,6 +113,7 @@ var Player = exports.Player = function () {
         this.health = 100;
         this.inventory.splice(0, 1);
       }
+      this.damagePlayer();
     }
   }, {
     key: "win",
@@ -124,7 +134,7 @@ var Player = exports.Player = function () {
         this.radiation = 150;
       }
       this.experience += this.difficulty * 10;
-      levelUp(this.level, this.experience);
+      this.levelUp(this.level, this.experience);
     }
   }, {
     key: "levelUp",
@@ -136,6 +146,12 @@ var Player = exports.Player = function () {
         this.stamina += 10;
         this.radiation += 10;
       }
+    }
+  }, {
+    key: "damagePlayer",
+    value: function damagePlayer() {
+      var attacks = ["basicAttack", "specialAttack"];
+      this.health -= this.currentEnemy[0].attacks[Math.floor(Math.random() * 1.99)];
     }
   }]);
 
