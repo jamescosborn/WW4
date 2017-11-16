@@ -30,23 +30,24 @@ var Player = exports.Player = function () {
     this.difficulty = 1;
     this.gameWin = false;
     this.gameLose = false;
+    this.cornPortrait = false;
   }
 
   _createClass(Player, [{
     key: "typeChooser",
     value: function typeChooser() {
-      if (this.type === "Gladior") {
+      if (this.type === "Gladiator") {
         this.stamina = 100;
         this.radiation = 100;
         this.physAttacks = ["Bat Swing", "Gut Punch"];
         this.radiationAttacks = ["Gamma Smash", "Toxic Toss"];
-        this.specialAttack = "Enrage - Deal quadruple damage and heal yourself for every damage point dealt";
+        this.specialAttack = "Enrage - Deal quadruple damage and heal yourself for half of every damage point dealt";
       } else if (this.type === "Hunter") {
         this.stamina = 150;
         this.radiation = 50;
         this.physAttacks = ["Bazooka Launch", "Nunchuck Smack", "Butter Knife Stab"];
         this.radiationAttacks = ["Radiation Poison"];
-        this.specialAttack = "Charged Shot - Use 50% of your stamina and deal that much damage times 2";
+        this.specialAttack = "Charged Shot - Deal 50% of your current stamina as damage times 2";
       } else if (this.type === "Warlock") {
         this.stamina = 50;
         this.radiation = 150;
@@ -63,6 +64,14 @@ var Player = exports.Player = function () {
       }
       var enemy = new Enemy(difficulty);
       var encounterMessage = "You have encountered a " + enemy.name;
+      if (enemy.name === "...It's your evil twin") {
+        this.specialAttackTimer += 100;
+      }
+      if (enemy.name === "Cyber Woman With Corn") {
+        this.cornPortrait = true;
+      } else {
+        this.cornPortrait = false;
+      }
       this.currentEnemy = [enemy, encounterMessage];
     }
   }, {
@@ -71,7 +80,7 @@ var Player = exports.Player = function () {
       if (playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
         this.attack();
       } else if (playerSelection === "Special Attack" && this.specialAttackTimer >= 100) {
-        if (this.type === "Gladior") {
+        if (this.type === "Gladiator") {
           this.enrage();
         } else if (this.type === "Hunter") {
           this.chargedShot();
@@ -87,7 +96,7 @@ var Player = exports.Player = function () {
   }, {
     key: "attack",
     value: function attack() {
-      this.currentEnemy[0].health -= this.level * 3;
+      this.currentEnemy[0].health -= this.level * 2;
       this.stamina -= 1;
       this.radiation -= 1;
       this.specialAttackTimer += 10;
@@ -115,7 +124,6 @@ var Player = exports.Player = function () {
     key: "chargedShot",
     value: function chargedShot() {
       this.currentEnemy[0].health -= this.stamina;
-      this.stamina = Math.floor(this.stamina / 2);
       this.specialAttackTimer -= 100;
       if (this.currentEnemy[0].health <= 0) {
         this.win();
@@ -156,7 +164,7 @@ var Player = exports.Player = function () {
       if (this.currentEnemy[0].name === "...It's your evil twin") {
         this.gameWin = true;
       }
-      if (this.type === "Gladior") {
+      if (this.type === "Gladiator") {
         this.stamina = 100 + (this.level - 1) * 10;
         this.radiation = 100 + (this.level - 1) * 10;
       } else if (this.type === "Hunter") {
@@ -169,9 +177,9 @@ var Player = exports.Player = function () {
       this.difficulty++;
       if (this.currentEnemy[0].boss) {
         this.inventory += 5;
-        this.experience += this.difficulty * 20;
+        this.experience += this.difficulty * 40;
       } else {
-        this.experience += this.difficulty * 10;
+        this.experience += this.difficulty * 20;
         var rng = Math.random() * 100;
         if (rng > 50) {
           this.inventory++;
@@ -222,7 +230,7 @@ var Enemy = exports.Enemy = function Enemy(difficulty) {
   var bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur", "...It's your evil twin"];
   if (difficulty % 10 === 0) {
     this.name = bosses[difficulty / 10 - 1];
-    this.health = difficulty * 25;
+    this.health = difficulty * 50;
     this.basicAttack = difficulty;
     this.specialAttack = difficulty * 2;
     this.boss = true;
@@ -263,7 +271,7 @@ $(document).ready(function () {
       $("#character-level").text("Level: " + player.level);
       $("#character-experience").text("EXP: " + player.experience + "/" + player.level * 100);
       $("#character-health").text("Health: " + player.health + "/" + (100 + (player.level - 1) * 10));
-      if (player.type === "Gladior") {
+      if (player.type === "Gladiator") {
         $("#character-radiation").text("Radiation: " + player.radiation + "/" + (100 + (player.level - 1) * 10));
         $("#character-stamina").text("Stamina: " + player.stamina + "/" + (100 + (player.level - 1) * 10));
       } else if (player.type === "Hunter") {
@@ -274,21 +282,43 @@ $(document).ready(function () {
         $("#character-stamina").text("Stamina: " + player.stamina + "/" + (50 + (player.level - 1) * 10));
       }
       $("#character-inventory").text("Potion Count: " + player.inventory);
+      $("#special-timer").text("Special Charge: " + player.specialAttackTimer);
       $("#enemy-name").text("" + player.currentEnemy[0].name);
       $("#enemy-difficulty").text("Level: " + player.difficulty);
       $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
       $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
+      if (player.cornPortrait) {
+        $("#portrait").show();
+      } else {
+        $("#portrait").hide();
+      }
       $("#encounter-message").empty();
     }, 1000);
   });
   $("#attack").click(function () {
+    var before = player.currentEnemy[0];
+    var level = player.level;
     player.fight("Attack");
+    if (before != player.currentEnemy[0]) {
+      $(".encounter").hide();
+      $("#encounter-message").text("You defeated the " + before.name);
+      if (level != player.level) {
+        $("#encounter-message").append("<br><br><font color=\"green\">You leveled up!");
+      }
+      setTimeout(function () {
+        $("#encounter-message").text("" + player.currentEnemy[1]);
+      }, 1000);
+      setTimeout(function () {
+        $(".encounter").show();
+        $("#encounter-message").empty();
+      }, 2000);
+    }
     $("#character").text("" + player.name);
     $("#character-type-name").text("" + player.type);
     $("#character-level").text("Level: " + player.level);
     $("#character-experience").text("EXP: " + player.experience + "/" + player.level * 100);
     $("#character-health").text("Health: " + player.health + "/" + (100 + (player.level - 1) * 10));
-    if (player.type === "Gladior") {
+    if (player.type === "Gladiator") {
       $("#character-radiation").text("Radiation: " + player.radiation + "/" + (100 + (player.level - 1) * 10));
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (100 + (player.level - 1) * 10));
     } else if (player.type === "Hunter") {
@@ -299,10 +329,16 @@ $(document).ready(function () {
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (50 + (player.level - 1) * 10));
     }
     $("#character-inventory").text("Potion Count: " + player.inventory);
+    $("#special-timer").text("Special Charge: " + player.specialAttackTimer);
     $("#enemy-name").text("" + player.currentEnemy[0].name);
     $("#enemy-difficulty").text("Level: " + player.difficulty);
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
+    if (player.cornPortrait) {
+      $("#portrait").show();
+    } else {
+      $("#portrait").hide();
+    }
     if (player.inventory != 0) {
       $("#item").show();
     }
@@ -313,18 +349,37 @@ $(document).ready(function () {
       $("#special-attack").hide();
       $("#item").hide();
       $(".encounter").hide();
-      $(".character-creation").show();
       $("#lose-test").text("You died to a " + player.currentEnemy[0].name + ". Better luck next time!");
+      setTimeout(function () {
+        $(".character-creation").show();
+        $("#lose-test").empty();
+      }, 1000);
     }
   });
   $("#special-attack").click(function () {
+    var before = player.currentEnemy[0];
+    var level = player.level;
     player.fight("Special Attack");
+    if (before != player.currentEnemy[0]) {
+      $(".encounter").hide();
+      $("#encounter-message").text("You defeated " + before.name);
+      if (level != player.level) {
+        $("#encounter-message").append("<br><br><font color=\"green\">You leveled up!");
+      }
+      setTimeout(function () {
+        $("#encounter-message").text("" + player.currentEnemy[1]);
+      }, 1000);
+      setTimeout(function () {
+        $(".encounter").show();
+        $("#encounter-message").empty();
+      }, 2000);
+    }
     $("#character").text("" + player.name);
     $("#character-type-name").text("" + player.type);
     $("#character-level").text("Level: " + player.level);
     $("#character-experience").text("EXP: " + player.experience + "/" + player.level * 100);
     $("#character-health").text("Health: " + player.health + "/" + (100 + (player.level - 1) * 10));
-    if (player.type === "Gladior") {
+    if (player.type === "Gladiator") {
       $("#character-radiation").text("Radiation: " + player.radiation + "/" + (100 + (player.level - 1) * 10));
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (100 + (player.level - 1) * 10));
     } else if (player.type === "Hunter") {
@@ -335,10 +390,16 @@ $(document).ready(function () {
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (50 + (player.level - 1) * 10));
     }
     $("#character-inventory").text("Potion Count: " + player.inventory);
+    $("#special-timer").text("Special Charge: " + player.specialAttackTimer);
     $("#enemy-name").text("" + player.currentEnemy[0].name);
     $("#enemy-difficulty").text("Level: " + player.difficulty);
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
+    if (player.cornPortrait) {
+      $("#portrait").show();
+    } else {
+      $("#portrait").hide();
+    }
     if (player.specialAttackTimer < 100) {
       $("#special-attack").hide();
     }
@@ -360,7 +421,7 @@ $(document).ready(function () {
     $("#character-level").text("Level: " + player.level);
     $("#character-experience").text("EXP: " + player.experience + "/" + player.level * 100);
     $("#character-health").text("Health: " + player.health + "/" + (100 + (player.level - 1) * 10));
-    if (player.type === "Gladior") {
+    if (player.type === "Gladiator") {
       $("#character-radiation").text("Radiation: " + player.radiation + "/" + (100 + (player.level - 1) * 10));
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (100 + (player.level - 1) * 10));
     } else if (player.type === "Hunter") {
@@ -371,13 +432,27 @@ $(document).ready(function () {
       $("#character-stamina").text("Stamina: " + player.stamina + "/" + (50 + (player.level - 1) * 10));
     }
     $("#character-inventory").text("Potion Count: " + player.inventory);
+    $("#special-timer").text("Special Charge: " + player.specialAttackTimer);
     $("#enemy-name").text("" + player.currentEnemy[0].name);
     $("#enemy-difficulty").text("Level: " + player.difficulty);
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
+    if (player.cornPortrait) {
+      $("#portrait").show();
+    } else {
+      $("#portrait").hide();
+    }
     if (player.inventory === 0) {
       $("#item").hide();
     }
+  });
+  $("#start").click(function () {
+    $(".game-start").hide();
+    $(".character-creation").show();
+  });
+  $("#name-generator").click(function () {
+    var listOfNames = ["The Big Taco", "Oz", "Bizzclaw", "Lydian Lights", "Lab Rat", "Carbon the Destroyer", "Wunderkid", "Recyclops", "Black Sabbath 2", "Player Unknown", "Will Smith", "Don't Call Me Bobby", "BioPunk", "Dr. Smiles", "Mud", "The Warthog", "Your Nightmare", "The HR Machine", "Alient Ant Farm"];
+    $("#character-name").val(listOfNames[Math.floor(Math.random() * listOfNames.length)]);
   });
 });
 

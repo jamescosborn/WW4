@@ -11,13 +11,7 @@ var browserSync = require('browser-sync').create();
 var babelify = require("babelify");
 var lib = require('bower-files')({
   "overrides":{
-    "bootstrap" : {
-      "main": [
-        "less/bootstrap.less",
-        "dist/css/bootstrap.css",
-        "dist/js/bootstrap.js"
-      ]
-    }
+
   }
 });
 

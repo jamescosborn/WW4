@@ -1,5 +1,9 @@
 #enemy {
 }
+.game-start {
+  display: flex;
+  flex-direction: column;
+}
 .encounter {
   display: flex;
   justify-content: space-around;
@@ -31,4 +35,69 @@
 #special-attack {
   margin-top: 50px;
   padding: 20px;
+}
+
+.plzwurk .character-creation {
+  display: none;
+}
+
+.plzwurk {
+  width: 100vw;
+  color: rebeccapurple;
+  display: flex;
+  justify-content: center;
+}
+
+#title {
+  text-align: center;
+  font-family: 'Special Elite', cursive;
+  font-size: 70px;
+}
+#start {
+  margin-top: 60px;
+  padding: 30px;
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+.ascii-start {
+  margin-left: 60px;
+}
+/*#gladiator-description, #warlock-description, #hunter-description {
+  display: none;
+}*/
+
+#gladiator, #warlock, #hunter {
+  display: flex;
+  align-items: center;
+
+}
+#hunter-special, #gladiator-special, #warlock-special {
+  font-style: italic;
+}
+
+#gladiator p, #warlock p, #hunter p {
+  padding-left: 30px;
+  flex-wrap: wrap;
+  width: 400px;
+}
+
+#gladiator:hover #gladiator-description::after {
+  content: "Masters of the Wasteland, a Gladiator is a carbon destroyer. They are all around warriors, and they never give in to defeat.";
+}
+#warlock:hover #warlock-description::after {
+  content: "By some strange magic, the Warlocks of Black Marsh are able to use radiation as a weapon. They are feared worldwide.";
+}
+#hunter:hover #hunter-description::after {
+  content: "Centaurs by result of radiation mutation, hunters are smart, cunning, and have the stamina to outlast their opponents.";
+}
+#gladiator:hover #gladiator-special::after {
+  content: "Enrage - Deal quadruple damage and heal yourself for half of every damage point dealt.";
+}
+#warlock:hover #warlock-special::after {
+  content: "Devil Deal - Halves your current health, deals your max health times 3 to the enemy.";
+}
+#hunter:hover #hunter-special::after {
+  content: "Charged Shot - Deal 50% of your current stamina as damage times 2.";
 }

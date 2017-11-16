@@ -13,7 +13,7 @@
 |Behavior|Input|Output|
 |-|-|-|
 |Make Player Name|Embrossia|new player Embrossia|
-|Make Player Class|Irradiated Gladior|Embrossia - Irradiated Gladior|
+|Make Player Class|Irradiated Gladiator|Embrossia - Irradiated Gladiator|
 |Generate Random Enemies based on difficulty|level 20|Komodo Dragon Dragon|
 |Player can attack enemy|use bash|enemy takes 10 damage|
 |Enemies die and reward exp|enemy dies|Player gets 10 exp|
@@ -38,11 +38,11 @@ _If you find a way to monetize this please contact the author_
 
 
 # NOTES
-* Special attacks
-* Balancing
+<!-- * Special attacks
+* Balancing -->
 * UI
-* Random Name Generator
-* Encounter Message
+<!-- * Random Name Generator -->
+<!-- * Encounter Message -->
+* win encouter message
 * ASCII Art
 * picture of enemy slides in when encounter message happens
-* regular attacks

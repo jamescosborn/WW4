@@ -17,21 +17,21 @@ describe('levelUp', function() {
 });
 describe('typeChooser', function() {
   it('should select the correct class for player', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
-    expect(player.type).toEqual("Irradiated Gladior");
+    expect(player.type).toEqual("Irradiated Gladiator");
   });
 });
 describe('encounter', function() {
   it('Encounters a Boss', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.encounter(40);
     expect(player.currentEnemy[0].name).toEqual("Centaur");
   });
 });
 describe('encounter', function() {
   it('Encounters a basic enemy at random', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.encounter(49);
     let enemy = player.currentEnemy[0].name;
     expect(enemy).not.toEqual(undefined);
@@ -39,7 +39,7 @@ describe('encounter', function() {
 });
 describe('fight', function() {
   it('select attack successfully', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(player.difficulty);
     player.fight("Attack");
@@ -48,7 +48,7 @@ describe('fight', function() {
 });
 describe('fight', function() {
   it('select not attack successfully', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.encounter(1);
     player.stamina = 0;
     expect(player.fight("Attack")).toEqual("not a valid move");
@@ -56,7 +56,7 @@ describe('fight', function() {
 });
 describe('win', function() {
   it('should win a fight', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(2);
     player.currentEnemy[0].health = 1;
@@ -66,7 +66,7 @@ describe('win', function() {
 });
 describe('special', function() {
   it('should do double damage', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(1);
     player.specialAttackTimer = 100;
@@ -76,7 +76,7 @@ describe('special', function() {
 });
 describe('inventory', function() {
   it('should heal player fully', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(player.difficulty);
     player.health = 80;
@@ -87,7 +87,7 @@ describe('inventory', function() {
 });
 describe('inventory', function() {
   it('should heal player partially', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(player.difficulty);
     player.health = 70;
@@ -98,7 +98,7 @@ describe('inventory', function() {
 });
 describe('inventory', function() {
   it('should not heal the player', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(1);
     player.health = 70;
@@ -108,7 +108,7 @@ describe('inventory', function() {
 });
 describe('all', function() {
   it('should simulate whole fight', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(1);
     player.specialAttackTimer = 100;
@@ -122,7 +122,7 @@ describe('all', function() {
 });
 describe('fight', function() {
   it('should simulate enemy dying and new enemy appearing', function() {
-    const player = new Player("Embrossia", "Irradiated Gladior");
+    const player = new Player("Embrossia", "Irradiated Gladiator");
     player.typeChooser();
     player.encounter(1);
     player.specialAttackTimer = 100;
