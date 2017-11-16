@@ -52,10 +52,14 @@ gulp.task('serve', function() {
 
   gulp.watch(['js/*.js'], ['jsBuild']);
   gulp.watch(['bower.json'], ['bowerBuild']);
-
+  gulp.watch(['index.html'], ['htmlBuild']);
 });
 
 gulp.task('bowerBuild', ['bower'], function(){
+  browserSync.reload();
+});
+
+gulp.task('htmlBuild', function(){
   browserSync.reload();
 });
 
@@ -80,7 +84,7 @@ gulp.task('jsBrowserify', ['concatInterface'], function() {
   });
 
 gulp.task('concatInterface', function() {
-  return gulp.src(['./js/*.js'])
+  return gulp.src(['./js/*-interface.js'])
     .pipe(concat('allConcat.js'))
     .pipe(gulp.dest('./tmp'));
 });

@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link href="build/css/vendor.css" rel="stylesheet" type="text/css">
-    <script src="build/js/vendor.min.js"></script>
-    <script type="text/javascript" src="build/js/app.js"></script>
-    <title>Rename</title>
-  </head>
-  <body>
-
-  </body>
+<head>
+  <link href="build/css/vendor.css" rel="stylesheet" type="text/css">
+  <script src="build/js/vendor.min.js"></script>
+  <script type="text/javascript" src="build/js/app.js"></script>
+  <title>Rename</title>
+</head>
+<body>
+  <div class="character-creation">
+    <form id="create" action="index.html" method="post">
+      <label for="character-name">Name your character!</label>
+      <input id="character-name" type="text" name="character-name">
+      <select id="character-type" name="character-type">
+        <option value="Irradiated Gladior">Irradiated Gladior</option>
+        <option value="Centaur Hunter">Centaur Hunter</option>
+        <option value="Noxious Warlock">Noxious Warlock</option>
+      </select>
+      <button type="submit" name="button">MAKE YOUR CHARACTER</button>
+    </form>
+    <h1 id="lose-test"></h1>
+  </div>
+  <h1 id="encounter-message"></h1>
+  <div class="encounter">
+    <h4 id="character-stats"></h4>
+    <h4 id="enemy-stats"></h4>
+    <button type="button" id="attack" name="button">ATTACK</button>
+  </div>
+  <button type="button" id="item" name="button">USE ITEM</button>
+  <button type="button" id="special-attack" name="button">SPECIAL ATTACK</button>
+</body>
 </html>

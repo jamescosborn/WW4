@@ -9,8 +9,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-$(document).ready(function () {});
-
 var Player = exports.Player = function () {
   function Player(name, type) {
     _classCallCheck(this, Player);
@@ -26,11 +24,12 @@ var Player = exports.Player = function () {
     this.specialAttackTimer = 0;
     this.damage = 10;
     this.currentEnemy = [];
-    this.inventory = [];
+    this.inventory = 0;
     this.experience = 0;
     this.level = 1;
     this.difficulty = 1;
     this.gameWin = false;
+    this.gameLose = false;
   }
 
   _createClass(Player, [{
@@ -71,9 +70,9 @@ var Player = exports.Player = function () {
     value: function fight(playerSelection) {
       if (playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
         this.attack();
-      } else if (playerSelection === "Special Attack" && this.specialAttackTimer === 100) {
+      } else if (playerSelection === "Special Attack" && this.specialAttackTimer >= 100) {
         this.special();
-      } else if (playerSelection === "Item" && this.inventory.length != 0) {
+      } else if (playerSelection === "Item" && this.inventory != 0) {
         this.useItem();
       } else {
         return "not a valid move";
@@ -83,8 +82,8 @@ var Player = exports.Player = function () {
     key: "attack",
     value: function attack() {
       this.currentEnemy[0].health -= this.level * 2;
-      this.stamina -= 10;
-      this.radiation -= 10;
+      this.stamina -= 1;
+      this.radiation -= 1;
       this.specialAttackTimer += 10;
       if (this.currentEnemy[0].health <= 0) {
         this.win();
@@ -96,7 +95,7 @@ var Player = exports.Player = function () {
     key: "special",
     value: function special() {
       this.currentEnemy[0].health -= this.level * 4;
-      this.specialAttackTimer = 0;
+      this.specialAttackTimer -= 100;
       if (this.currentEnemy[0].health <= 0) {
         this.win();
       } else {
@@ -108,12 +107,11 @@ var Player = exports.Player = function () {
     value: function useItem() {
       if (this.health < 80) {
         this.health += 20;
-        this.inventory.splice(0, 1);
+        this.inventory--;
       } else {
         this.health = 100;
-        this.inventory.splice(0, 1);
+        this.inventory--;
       }
-      this.damagePlayer();
     }
   }, {
     key: "win",
@@ -122,19 +120,21 @@ var Player = exports.Player = function () {
         this.gameWin = true;
       }
       this.currentEnemy = [];
-      this.inventory += "potion";
+      this.inventory++;
       if (this.type === "Irradiated Gladior") {
-        this.stamina = 100;
-        this.radiation = 100;
+        this.stamina = 100 + this.level * 10;
+        this.radiation = 100 + this.level * 10;
       } else if (this.type === "Centaur Hunter") {
-        this.stamina = 150;
-        this.radiation = 50;
+        this.stamina = 150 + this.level * 20;
+        this.radiation = 50 + this.level * 5;
       } else if (this.type === "Noxious Warlock") {
-        this.stamina = 50;
-        this.radiation = 150;
+        this.stamina = 50 + this.level * 5;
+        this.radiation = 150 + this.level * 20;
       }
       this.experience += this.difficulty * 10;
       this.levelUp(this.level, this.experience);
+      this.difficulty++;
+      this.encounter(this.difficulty);
     }
   }, {
     key: "levelUp",
@@ -142,16 +142,24 @@ var Player = exports.Player = function () {
       var expCap = level * 100;
       if (experience >= expCap && level < 50) {
         this.level++;
-        this.health += 10;
+        this.health = 100 + this.level * 10;
         this.stamina += 10;
         this.radiation += 10;
+        this.experience = 0;
       }
     }
   }, {
     key: "damagePlayer",
     value: function damagePlayer() {
-      var attacks = ["basicAttack", "specialAttack"];
-      this.health -= this.currentEnemy[0].attacks[Math.floor(Math.random() * 1.99)];
+      var attack = Math.floor(Math.random() * 1.99);
+      if (attack === 1) {
+        this.health -= this.currentEnemy[0].basicAttack;
+      } else {
+        this.health -= this.currentEnemy[0].specialAttack;
+      }
+      if (this.health <= 0) {
+        this.gameLose = true;
+      }
     }
   }]);
 
@@ -171,9 +179,83 @@ var Enemy = exports.Enemy = function Enemy(difficulty) {
   } else {
     this.name = enemies[Math.floor(Math.random() * 6.9)];
     this.health = difficulty * 5;
-    this.basicAttack = Math.floor(difficulty / 2);
-    this.specialAttack = difficulty;
+    this.basicAttack = difficulty;
+    this.specialAttack = difficulty * 2;
   }
 };
 
-},{}]},{},[1]);
+},{}],2:[function(require,module,exports){
+"use strict";
+
+var _RPG = require("./../js/RPG.js");
+
+$(document).ready(function () {
+  $(".encounter").hide();
+  var player = new _RPG.Player();
+  if (player.inventory === 0) {
+    $("#item").hide();
+  }
+  if (player.specialAttackTimer != 100 || player.specialAttackTimer > 100) {
+    $("#special-attack").hide();
+  }
+  $("#create").submit(function (event) {
+    event.preventDefault();
+    player = new _RPG.Player($("#character-name").val(), $("#character-type").val());
+    player.typeChooser();
+    player.encounter(player.difficulty);
+    $(".character-creation").hide();
+    $("#encounter-message").text("" + player.currentEnemy[1]);
+    setTimeout(function () {
+      $(".encounter").show();
+      $("#character-stats").text(player.name + " Level: " + player.level + "\n        Health: " + player.health + " Stamina: " + player.stamina + " Radiation: " + player.radiation + " Potion Count: " + player.inventory + " EXP: " + player.experience + "/" + player.level * 100);
+      $("#enemy-stats").text(player.currentEnemy[0].name + "'s Health: " + player.currentEnemy[0].health);
+      $("#encounter-message").empty();
+    }, 1000);
+  });
+  $("#attack").click(function () {
+    player.fight("Attack");
+    $("#character-stats").text(player.name + " Level: " + player.level + "\n      Health: " + player.health + " Stamina: " + player.stamina + " Radiation: " + player.radiation + " Potion Count: " + player.inventory + " EXP: " + player.experience + "/" + player.level * 100);
+    $("#enemy-stats").text(player.currentEnemy[0].name + "'s Health: " + player.currentEnemy[0].health);
+    if (player.inventory != 0) {
+      $("#item").show();
+    }
+    if (player.specialAttackTimer >= 100) {
+      $("#special-attack").show();
+    }
+    if (player.gameLose) {
+      $("#special-attack").hide();
+      $("#special-attack").hide();
+      $(".encounter").hide();
+      $(".character-creation").show();
+      $("#lose-test").text("You died to a " + player.currentEnemy[0].name + ". Better luck next time!");
+    }
+  });
+  $("#special-attack").click(function () {
+    player.fight("Special Attack");
+    $("#character-stats").text(player.name + " Level: " + player.level + "\n      Health: " + player.health + " Stamina: " + player.stamina + " Radiation: " + player.radiation + " Potion Count: " + player.inventory + " EXP: " + player.experience + "/" + player.level * 100);
+    $("#enemy-stats").text(player.currentEnemy[0].name + "'s Health: " + player.currentEnemy[0].health);
+    if (player.specialAttackTimer < 100) {
+      $("#special-attack").hide();
+    }
+    if (player.inventory === 0) {
+      $("#item").show();
+    }
+    if (player.gameLose) {
+      $("#special-attack").hide();
+      $("#special-attack").hide();
+      $(".encounter").hide();
+      $(".character-creation").show();
+      $("#lose-test").text("You died to a " + player.currentEnemy[0].name + ". Better luck next time!");
+    }
+  });
+  $("#item").click(function () {
+    player.fight("Item");
+    $("#character-stats").text(player.name + " Level: " + player.level + "\n      Health: " + player.health + " Stamina: " + player.stamina + " Radiation: " + player.radiation + " Potion Count: " + player.inventory + " EXP: " + player.experience + "/" + player.level * 100);
+    $("#enemy-stats").text(player.currentEnemy[0].name + "'s Health: " + player.currentEnemy[0].health);
+    if (player.inventory === 0) {
+      $("#item").hide();
+    }
+  });
+});
+
+},{"./../js/RPG.js":1}]},{},[2]);

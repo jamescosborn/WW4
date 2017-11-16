@@ -11,11 +11,12 @@ export class Player {
     this.specialAttackTimer = 0;
     this.damage = 10;
     this.currentEnemy = [];
-    this.inventory = [];
+    this.inventory = 0;
     this.experience = 0;
     this.level = 1;
     this.difficulty = 1;
     this.gameWin = false;
+    this.gameLose = false;
   }
   typeChooser() {
     if(this.type === "Irradiated Gladior") {
@@ -49,9 +50,9 @@ export class Player {
   fight(playerSelection) {
     if(playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
       this.attack();
-    } else if (playerSelection === "Special Attack" && this.specialAttackTimer === 100) {
+    } else if (playerSelection === "Special Attack" && this.specialAttackTimer >= 100) {
       this.special();
-    } else if (playerSelection === "Item" && this.inventory.length != 0) {
+    } else if (playerSelection === "Item" && this.inventory != 0) {
       this.useItem();
     } else {
       return "not a valid move";
@@ -59,8 +60,8 @@ export class Player {
   }
   attack() {
     this.currentEnemy[0].health -= this.level * 2;
-    this.stamina -= 10;
-    this.radiation -=10;
+    this.stamina -= 1;
+    this.radiation -=1;
     this.specialAttackTimer += 10;
     if(this.currentEnemy[0].health <= 0) {
       this.win();
@@ -70,7 +71,7 @@ export class Player {
   }
   special() {
     this.currentEnemy[0].health -= this.level * 4;
-    this.specialAttackTimer = 0;
+    this.specialAttackTimer -= 100;
     if(this.currentEnemy[0].health <= 0) {
       this.win();
     } else {
@@ -80,10 +81,10 @@ export class Player {
   useItem() {
     if(this.health < 80) {
       this.health += 20;
-      this.inventory.splice(0,1);
+      this.inventory--;
     } else {
       this.health = 100;
-      this.inventory.splice(0,1);
+      this.inventory--;
     }
   }
   win() {
@@ -91,28 +92,30 @@ export class Player {
       this.gameWin = true;
     }
     this.currentEnemy = [];
-    this.inventory += "potion";
+    this.inventory++;
     if(this.type === "Irradiated Gladior") {
-      this.stamina = 100;
-      this.radiation = 100;
+      this.stamina = 100 + (this.level*10);
+      this.radiation = 100 + (this.level*10);
     } else if (this.type === "Centaur Hunter") {
-      this.stamina = 150;
-      this.radiation = 50;
+      this.stamina = 150 + (this.level*20);
+      this.radiation = 50 + (this.level*5);
     } else if (this.type === "Noxious Warlock") {
-      this.stamina = 50;
-      this.radiation = 150;
+      this.stamina = 50 + (this.level*5);
+      this.radiation = 150  + (this.level*20);
     }
     this.experience += this.difficulty * 10;
     this.levelUp(this.level, this.experience);
     this.difficulty++;
+    this.encounter(this.difficulty);
   }
   levelUp(level, experience) {
     const expCap = level*100;
     if(experience >= expCap && level < 50) {
       this.level++;
-      this.health += 10;
+      this.health = 100 + (this.level*10);
       this.stamina += 10;
       this.radiation += 10;
+      this.experience = 0;
     }
   }
   damagePlayer() {
@@ -121,6 +124,9 @@ export class Player {
       this.health -= this.currentEnemy[0].basicAttack;
     } else {
       this.health -= this.currentEnemy[0].specialAttack;
+    }
+    if(this.health <= 0) {
+      this.gameLose = true;
     }
   }
 }

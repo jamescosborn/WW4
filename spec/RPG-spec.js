@@ -1,4 +1,4 @@
-import { Player, Enemy } from './../js/RPG.js';
+import { Player } from './../js/RPG.js';
 
 describe('levelUp', function() {
   it('should not level up if experience does not meet threshold.', function() {
@@ -78,9 +78,9 @@ describe('inventory', function() {
   it('should heal player fully', function() {
     const player = new Player("Embrossia", "Irradiated Gladior");
     player.typeChooser();
-    player.encounter(1);
+    player.encounter(player.difficulty);
     player.health = 80;
-    player.inventory = ["potion"];
+    player.inventory = 1;
     player.fight("Item");
     expect(player.health).toEqual(100);
   });
@@ -89,9 +89,9 @@ describe('inventory', function() {
   it('should heal player partially', function() {
     const player = new Player("Embrossia", "Irradiated Gladior");
     player.typeChooser();
-    player.encounter(1);
+    player.encounter(player.difficulty);
     player.health = 70;
-    player.inventory = ["potion"];
+    player.inventory = 1;
     player.fight("Item");
     expect(player.health).toEqual(90);
   });
@@ -104,5 +104,32 @@ describe('inventory', function() {
     player.health = 70;
     player.fight("Item");
     expect(player.health).toEqual(70);
+  });
+});
+describe('all', function() {
+  it('should simulate whole fight', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.specialAttackTimer = 100;
+    player.fight("Special Attack");
+    player.inventory = 1;
+    player.fight("Item");
+    expect(player.health).toEqual(100);
+    let result = player.fight("Attack");
+    expect(result).not.toEqual("not a valid move");
+  });
+});
+describe('fight', function() {
+  it('should simulate enemy dying and new enemy appearing', function() {
+    const player = new Player("Embrossia", "Irradiated Gladior");
+    player.typeChooser();
+    player.encounter(1);
+    player.specialAttackTimer = 100;
+    player.fight("Special Attack");
+    player.specialAttackTimer = 100;
+    player.fight("Special Attack");
+    alert(player.currentEnemy);
+    expect(player.currentEnemy).not.toEqual([]);
   });
 });
