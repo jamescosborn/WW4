@@ -9,12 +9,13 @@
 <body>
   <div class="character-creation">
     <form id="create" action="index.html" method="post">
-      <label for="character-name">Name your character!</label>
+      <label for="character-name">Name your character:</label>
       <input id="character-name" type="text" name="character-name">
+      <label for="character-type">Choose your class:</label>
       <select id="character-type" name="character-type">
-        <option value="Irradiated Gladior">Irradiated Gladior</option>
-        <option value="Centaur Hunter">Centaur Hunter</option>
-        <option value="Noxious Warlock">Noxious Warlock</option>
+        <option value="Gladior">Gladior</option>
+        <option value="Hunter">Hunter</option>
+        <option value="Warlock">Warlock</option>
       </select>
       <button type="submit" name="button">MAKE YOUR CHARACTER</button>
     </form>
@@ -22,11 +23,28 @@
   </div>
   <h1 id="encounter-message"></h1>
   <div class="encounter">
-    <h4 id="character-stats"></h4>
-    <h4 id="enemy-stats"></h4>
-    <button type="button" id="attack" name="button">ATTACK</button>
+    <div id="the-character">
+      <h2 id="character"></h2>
+      <h3 id="character-type-name"></h3>
+      <h4 id="character-level"></h4>
+      <h4 id="character-experience"></h4>
+      <h4 id="character-health"></h4>
+      <h4 id="character-radiation"></h4>
+      <h4 id="character-stamina"></h4>
+      <h4 id="character-inventory"></h4>
+    </div>
+    <div class="buttons">
+      <button type="button" id="attack" name="button">ATTACK</button>
+      <button type="button" id="item" name="button">USE ITEM</button>
+      <button type="button" id="special-attack" name="button">SPECIAL</button>
+    </div>
+    <div id="enemy">
+      <h2 id="enemy-name"></h2>
+      <h4 id="enemy-difficulty"></h4>
+      <h4 id="enemy-health"></h4>
+      <h4 id="basic-damage"></h4>
+      <h4 id="special-attack-damage"></h4>
+    </div>
   </div>
-  <button type="button" id="item" name="button">USE ITEM</button>
-  <button type="button" id="special-attack" name="button">SPECIAL ATTACK</button>
 </body>
 </html>

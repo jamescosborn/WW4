@@ -38,12 +38,11 @@ _If you find a way to monetize this please contact the author_
 
 
 # NOTES
-* Balancing
 * Special attacks
-* regular attacks
+* Balancing
 * UI
 * Random Name Generator
-* Monster damage
 * Encounter Message
 * ASCII Art
 * picture of enemy slides in when encounter message happens
+* regular attacks

@@ -19,24 +19,24 @@ export class Player {
     this.gameLose = false;
   }
   typeChooser() {
-    if(this.type === "Irradiated Gladior") {
+    if(this.type === "Gladior") {
       this.stamina = 100;
       this.radiation = 100;
       this.physAttacks = ["Bat Swing", "Gut Punch"];
       this.radiationAttacks = ["Gamma Smash", "Toxic Toss"];
-      this.specialAttack = "Enrage - Deal double damage and heal yourself for every damage point dealt";
-    } else if (this.type === "Centaur Hunter") {
+      this.specialAttack = "Enrage - Deal quadruple damage and heal yourself for every damage point dealt";
+    } else if (this.type === "Hunter") {
       this.stamina = 150;
       this.radiation = 50;
       this.physAttacks = ["Bazooka Launch", "Nunchuck Smack", "Butter Knife Stab"];
       this.radiationAttacks = ["Radiation Poison"];
-      this.specialAttack = "Stink Bomb - Enemy misses next 2 attacks, YOUR next 2 attacks are poisoned";
-    } else if (this.type === "Noxious Warlock") {
+      this.specialAttack = "Charged Shot - Use 50% of your stamina and deal that much damage times 2";
+    } else if (this.type === "Warlock") {
       this.stamina = 50;
       this.radiation = 150;
       this.physAttacks = ["Wand Jab"];
       this.radiationAttacks = ["Toxic Tonic", "Venomous Sneeze", "Voodoo Doll"];
-      this.specialAttack = "Devil Deal - Halves your current health and the enemy's current health, restores all radiation";
+      this.specialAttack = "Devil Deal - Halves your current health, deals your max health times 3 to the enemy";
     }
   }
   encounter(difficulty) {
@@ -51,7 +51,13 @@ export class Player {
     if(playerSelection === "Attack" && this.stamina > 0 && this.radiation > 0) {
       this.attack();
     } else if (playerSelection === "Special Attack" && this.specialAttackTimer >= 100) {
-      this.special();
+      if(this.type === "Gladior") {
+        this.enrage();
+      } else if (this.type === "Hunter") {
+        this.chargedShot();
+      } else {
+        this.devilDeal();
+      }
     } else if (playerSelection === "Item" && this.inventory != 0) {
       this.useItem();
     } else {
@@ -59,7 +65,7 @@ export class Player {
     }
   }
   attack() {
-    this.currentEnemy[0].health -= this.level * 2;
+    this.currentEnemy[0].health -= this.level * 3;
     this.stamina -= 1;
     this.radiation -=1;
     this.specialAttackTimer += 10;
@@ -69,8 +75,35 @@ export class Player {
       this.damagePlayer();
     }
   }
-  special() {
-    this.currentEnemy[0].health -= this.level * 4;
+  enrage() {
+    this.currentEnemy[0].health -= this.level * 20;
+    this.health += this.level * 10;
+    this.stamina -= 20;
+    this.radiation -= 20;
+    this.specialAttackTimer -= 100;
+    if(this.currentEnemy[0].health <= 0) {
+      this.win();
+    } else {
+      this.damagePlayer();
+    }
+  }
+  chargedShot() {
+    this.currentEnemy[0].health -= this.stamina;
+    this.stamina = Math.floor(this.stamina / 2);
+    this.specialAttackTimer -= 100;
+    if(this.currentEnemy[0].health <= 0) {
+      this.win();
+    } else {
+      this.damagePlayer();
+    }
+  }
+  devilDeal() {
+    this.health /= 2;
+    if(this.health <= 0) {
+      this.gameLose = true;
+    }
+    this.currentEnemy[0].health -= (100 + (this.level-1) * 10) * 3;
+    this.radiation -= 20;
     this.specialAttackTimer -= 100;
     if(this.currentEnemy[0].health <= 0) {
       this.win();
@@ -79,11 +112,11 @@ export class Player {
     }
   }
   useItem() {
-    if(this.health < 80) {
-      this.health += 20;
+    if(this.health < (100 + ((this.level-1)*10) - 30)) {
+      this.health += 30;
       this.inventory--;
     } else {
-      this.health = 100;
+      this.health = 100 + ((this.level-1)*10);
       this.inventory--;
     }
   }
@@ -91,36 +124,48 @@ export class Player {
     if(this.currentEnemy[0].name === "...It's your evil twin") {
       this.gameWin = true;
     }
-    this.currentEnemy = [];
-    this.inventory++;
-    if(this.type === "Irradiated Gladior") {
-      this.stamina = 100 + (this.level*10);
-      this.radiation = 100 + (this.level*10);
-    } else if (this.type === "Centaur Hunter") {
-      this.stamina = 150 + (this.level*20);
-      this.radiation = 50 + (this.level*5);
-    } else if (this.type === "Noxious Warlock") {
-      this.stamina = 50 + (this.level*5);
-      this.radiation = 150  + (this.level*20);
+    if(this.type === "Gladior") {
+      this.stamina = 100 + ((this.level-1)*10);
+      this.radiation = 100 + ((this.level-1)*10);
+    } else if (this.type === "Hunter") {
+      this.stamina = 150 + ((this.level-1)*10);
+      this.radiation = 50 + ((this.level-1)*10);
+    } else if (this.type === "Warlock") {
+      this.stamina = 50 + ((this.level-1)*10);
+      this.radiation = 150  + ((this.level-1)*10);
     }
-    this.experience += this.difficulty * 10;
-    this.levelUp(this.level, this.experience);
     this.difficulty++;
+    if(this.currentEnemy[0].boss) {
+      this.inventory += 5;
+      this.experience += this.difficulty * 20
+    } else {
+      this.experience += this.difficulty * 10;
+      let rng = Math.random() * 100;
+      if(rng > 50) {
+        this.inventory++;
+      }
+    }
+    this.levelUp(this.level, this.experience);
+    this.currentEnemy = [];
     this.encounter(this.difficulty);
   }
   levelUp(level, experience) {
     const expCap = level*100;
     if(experience >= expCap && level < 50) {
-      this.level++;
-      this.health = 100 + (this.level*10);
+      if(this.health <= 100 + ((this.level-1)*10)){
+        this.level++;
+        this.health = 100 + ((this.level-1)*10);
+      } else {
+        this.level++;
+      }
       this.stamina += 10;
       this.radiation += 10;
-      this.experience = 0;
+      this.experience -= expCap;
     }
   }
   damagePlayer() {
-    let attack = Math.floor(Math.random()*1.99);
-    if(attack === 1) {
+    let attack = Math.floor(Math.random()*100.99);
+    if(attack >= 10) {
       this.health -= this.currentEnemy[0].basicAttack;
     } else {
       this.health -= this.currentEnemy[0].specialAttack;
@@ -132,18 +177,20 @@ export class Player {
 }
 export class Enemy {
   constructor(difficulty) {
-    const enemies = ["Mutated Rat", "Raider", "Giant Cockroach", "Zombie", "Rabid Bunny", "Deathpaw", "John Cena Meme"];
+    const enemies = ["Mutated Rat", "Raider", "Giant Cockroach", "Zombie", "Rabid Bunny", "Deathpaw", "Malfunctioning Robot"];
     const bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur", "...It's your evil twin"];
     if (difficulty%10 === 0) {
       this.name = bosses[(difficulty/10) - 1];
-      this.health = difficulty*100;
-      this.basicAttack = Math.floor(difficulty*1.5);
-      this.specialAttack = difficulty*3;
+      this.health = difficulty*25;
+      this.basicAttack = difficulty;
+      this.specialAttack = difficulty*2;
+      this.boss = true;
     } else {
       this.name = enemies[Math.floor(Math.random() * 6.9)];
       this.health = difficulty*5;
       this.basicAttack = difficulty;
       this.specialAttack = difficulty*2;
+      this.boss = false;
     }
   }
 }

@@ -1,0 +1,34 @@
+#enemy {
+}
+.encounter {
+  display: flex;
+  justify-content: space-around;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+#enemy-health, #character-health {
+  color: red;
+}
+#character-experience, #character-level, #enemy-difficulty {
+  color: orange;
+}
+#character-radiation {
+  color: blue;
+}
+#character-stamina {
+  color: green;
+}
+#attack {
+  margin-top: 50px;
+  padding: 20px;
+}
+#item {
+  margin-top: 50px;
+  padding: 20px;
+}
+#special-attack {
+  margin-top: 50px;
+  padding: 20px;
+}
