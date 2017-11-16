@@ -35,3 +35,15 @@ This is licensed under the MIT license
 Copyright (c) 2017 Twenty One Pilots Titus All Rights Reserved.
 
 _If you find a way to monetize this please contact the author_
+
+
+# NOTES
+* Balancing
+* Special attacks
+* regular attacks
+* UI
+* Random Name Generator
+* Monster damage
+* Encounter Message
+* ASCII Art
+* picture of enemy slides in when encounter message happens
