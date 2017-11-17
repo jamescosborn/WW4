@@ -41,9 +41,41 @@ $(document).ready(function(){
       $("#enemy-health").text(`Health: ${player.currentEnemy[0].health}`);
       $("#special-attack-damage").text(`Special Attack Damage: ${player.currentEnemy[0].specialAttack}`);
       if(player.cornPortrait) {
-        $("#portrait").show();
+        $("#corn-portrait").show();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if(player.dragonPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").show();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.semiPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").show();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.centaurPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#centaur-portrait").show();
+        $("#semi-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.evilPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").show();
       } else {
-        $("#portrait").hide();
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
       }
       $("#encounter-message").empty();
     }, 1000);
@@ -89,9 +121,41 @@ $(document).ready(function(){
     $("#enemy-health").text(`Health: ${player.currentEnemy[0].health}`);
     $("#special-attack-damage").text(`Special Attack Damage: ${player.currentEnemy[0].specialAttack}`);
     if(player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if(player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if(player.inventory != 0) {
       $("#item").show();
@@ -108,6 +172,15 @@ $(document).ready(function(){
         $(".character-creation").show();
         $("#lose-test").empty();
       }, 1000);
+    }
+    if(player.gameWin) {
+      $("#special-attack").hide();
+      $("#item").hide();
+      $(".encounter").hide();
+      setTimeout(function(){
+        $(".character-creation").show();
+      }, 1000);
+      $(".character-creation").show();
     }
   });
   $("#special-attack").click(function(){
@@ -151,9 +224,41 @@ $(document).ready(function(){
     $("#enemy-health").text(`Health: ${player.currentEnemy[0].health}`);
     $("#special-attack-damage").text(`Special Attack Damage: ${player.currentEnemy[0].specialAttack}`);
     if(player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if(player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if(player.specialAttackTimer < 100) {
       $("#special-attack").hide();
@@ -167,6 +272,12 @@ $(document).ready(function(){
       $(".encounter").hide();
       $(".character-creation").show();
       $("#lose-test").text(`You died to a ${player.currentEnemy[0].name}. Better luck next time!`);
+    }
+    if(player.gameWin) {
+      $("#special-attack").hide();
+      $("#item").hide();
+      $(".encounter").hide();
+      $(".character-creation").show();
     }
   });
   $("#item").click(function(){
@@ -193,9 +304,41 @@ $(document).ready(function(){
     $("#enemy-health").text(`Health: ${player.currentEnemy[0].health}`);
     $("#special-attack-damage").text(`Special Attack Damage: ${player.currentEnemy[0].specialAttack}`);
     if(player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if(player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if(player.inventory === 0) {
       $("#item").hide();

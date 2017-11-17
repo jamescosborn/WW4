@@ -31,6 +31,10 @@ var Player = exports.Player = function () {
     this.gameWin = false;
     this.gameLose = false;
     this.cornPortrait = false;
+    this.dragonPortrait = false;
+    this.semiPortrait = false;
+    this.centaurPortrait = false;
+    this.evilPortrait = false;
   }
 
   _createClass(Player, [{
@@ -59,9 +63,6 @@ var Player = exports.Player = function () {
   }, {
     key: "encounter",
     value: function encounter(difficulty) {
-      if (this.gameWin === true) {
-        return "You won the game";
-      }
       var enemy = new Enemy(difficulty);
       var encounterMessage = "You have encountered a " + enemy.name;
       if (enemy.name === "...It's your evil twin") {
@@ -69,8 +70,24 @@ var Player = exports.Player = function () {
       }
       if (enemy.name === "Cyber Woman With Corn") {
         this.cornPortrait = true;
+      } else if (enemy.name === "Komodo Dragon Dragon") {
+        this.cornPortrait = false;
+        this.dragonPortrait = true;
+      } else if (enemy.name === "Missing Semicolon") {
+        this.dragonPortrait = false;
+        this.semiPortrait = true;
+      } else if (enemy.name === "Centaur Tyrant") {
+        this.semiPortrait = false;
+        this.centaurPortrait = true;
+      } else if (enemy.name === "...It's your evil twin") {
+        this.centaurPortrait = false;
+        this.evilPortrait = true;
       } else {
         this.cornPortrait = false;
+        this.dragonPortrait = false;
+        this.semiPortrait = false;
+        this.centaurPortrait = false;
+        this.evilPortrait = false;
       }
       this.currentEnemy = [enemy, encounterMessage];
     }
@@ -227,7 +244,7 @@ var Enemy = exports.Enemy = function Enemy(difficulty) {
   _classCallCheck(this, Enemy);
 
   var enemies = ["Mutated Rat", "Raider", "Giant Cockroach", "Zombie", "Rabid Bunny", "Deathpaw", "Malfunctioning Robot"];
-  var bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur", "...It's your evil twin"];
+  var bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur Tyrant", "...It's your evil twin"];
   if (difficulty % 10 === 0) {
     this.name = bosses[difficulty / 10 - 1];
     this.health = difficulty * 50;
@@ -288,9 +305,41 @@ $(document).ready(function () {
       $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
       $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
       if (player.cornPortrait) {
-        $("#portrait").show();
+        $("#corn-portrait").show();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.dragonPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").show();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.semiPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").show();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.centaurPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#centaur-portrait").show();
+        $("#semi-portrait").hide();
+        $("#evil-portrait").hide();
+      } else if (player.evilPortrait) {
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").show();
       } else {
-        $("#portrait").hide();
+        $("#corn-portrait").hide();
+        $("#dragon-portrait").hide();
+        $("#semi-portrait").hide();
+        $("#centaur-portrait").hide();
+        $("#evil-portrait").hide();
       }
       $("#encounter-message").empty();
     }, 1000);
@@ -335,9 +384,41 @@ $(document).ready(function () {
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
     if (player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if (player.inventory != 0) {
       $("#item").show();
@@ -354,6 +435,15 @@ $(document).ready(function () {
         $(".character-creation").show();
         $("#lose-test").empty();
       }, 1000);
+    }
+    if (player.gameWin) {
+      $("#special-attack").hide();
+      $("#item").hide();
+      $(".encounter").hide();
+      setTimeout(function () {
+        $(".character-creation").show();
+      }, 1000);
+      $(".character-creation").show();
     }
   });
   $("#special-attack").click(function () {
@@ -396,9 +486,41 @@ $(document).ready(function () {
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
     if (player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if (player.specialAttackTimer < 100) {
       $("#special-attack").hide();
@@ -412,6 +534,12 @@ $(document).ready(function () {
       $(".encounter").hide();
       $(".character-creation").show();
       $("#lose-test").text("You died to a " + player.currentEnemy[0].name + ". Better luck next time!");
+    }
+    if (player.gameWin) {
+      $("#special-attack").hide();
+      $("#item").hide();
+      $(".encounter").hide();
+      $(".character-creation").show();
     }
   });
   $("#item").click(function () {
@@ -438,9 +566,41 @@ $(document).ready(function () {
     $("#enemy-health").text("Health: " + player.currentEnemy[0].health);
     $("#special-attack-damage").text("Special Attack Damage: " + player.currentEnemy[0].specialAttack);
     if (player.cornPortrait) {
-      $("#portrait").show();
+      $("#corn-portrait").show();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.dragonPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").show();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.semiPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").show();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.centaurPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#centaur-portrait").show();
+      $("#semi-portrait").hide();
+      $("#evil-portrait").hide();
+    } else if (player.evilPortrait) {
+      $("#corn-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#evil-portrait").show();
     } else {
-      $("#portrait").hide();
+      $("#evil-portrait").hide();
+      $("#centaur-portrait").hide();
+      $("#semi-portrait").hide();
+      $("#dragon-portrait").hide();
+      $("#corn-portrait").hide();
     }
     if (player.inventory === 0) {
       $("#item").hide();

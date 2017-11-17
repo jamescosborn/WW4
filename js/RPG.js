@@ -18,6 +18,10 @@ export class Player {
     this.gameWin = false;
     this.gameLose = false;
     this.cornPortrait = false;
+    this.dragonPortrait = false;
+    this.semiPortrait = false;
+    this.centaurPortrait = false;
+    this.evilPortrait = false;
   }
   typeChooser() {
     if(this.type === "Gladiator") {
@@ -41,9 +45,6 @@ export class Player {
     }
   }
   encounter(difficulty) {
-    if(this.gameWin === true) {
-      return "You won the game";
-    }
     const enemy = new Enemy(difficulty);
     const encounterMessage = `You have encountered a ${enemy.name}`;
     if(enemy.name === "...It's your evil twin") {
@@ -51,8 +52,24 @@ export class Player {
     }
     if(enemy.name === "Cyber Woman With Corn") {
       this.cornPortrait = true;
+    } else if(enemy.name === "Komodo Dragon Dragon") {
+      this.cornPortrait = false;
+      this.dragonPortrait = true;
+    } else if (enemy.name === "Missing Semicolon") {
+      this.dragonPortrait = false;
+      this.semiPortrait = true;
+    } else if (enemy.name === "Centaur Tyrant") {
+      this.semiPortrait = false;
+      this.centaurPortrait = true;
+    } else if (enemy.name === "...It's your evil twin") {
+      this.centaurPortrait = false;
+      this.evilPortrait = true;
     } else {
       this.cornPortrait = false;
+      this.dragonPortrait = false;
+      this.semiPortrait = false;
+      this.centaurPortrait = false;
+      this.evilPortrait = false;
     }
     this.currentEnemy = [enemy, encounterMessage];
   }
@@ -186,7 +203,7 @@ export class Player {
 export class Enemy {
   constructor(difficulty) {
     const enemies = ["Mutated Rat", "Raider", "Giant Cockroach", "Zombie", "Rabid Bunny", "Deathpaw", "Malfunctioning Robot"];
-    const bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur", "...It's your evil twin"];
+    const bosses = ["Cyber Woman With Corn", "Komodo Dragon Dragon", "Missing Semicolon", "Centaur Tyrant", "...It's your evil twin"];
     if (difficulty%10 === 0) {
       this.name = bosses[(difficulty/10) - 1];
       this.health = difficulty*50;
