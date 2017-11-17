@@ -1,5 +1,5 @@
 # WORLD WAR 4
-##### by Adam Titus
+##### by Adam Titus and James Osborn
 
 ### Description
 
