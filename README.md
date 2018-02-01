@@ -23,7 +23,6 @@ In WW4 the player will experience:
 ![Title screen for WW4](https://i.imgur.com/MxCozDM.png)
 
 #### _Character creation_
-<br />
 ![Character creation](https://i.imgur.com/EMl55FO.png)
 
 #### _First boss battle_
