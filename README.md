@@ -19,13 +19,13 @@ In WW4 the player will experience:
 * 5 unique bosses
 
 ### Screenshots
-#### Title screen for WW4
+#### _Title screen for WW4_
 ![Title screen for WW4](https://i.imgur.com/MxCozDM.png)
 
-#### Character creation
+#### _Character creation_
 ![Character creation](https://i.imgur.com/EMl55FO.png)
 
-#### First boss battle
+#### _First boss battle_
 ![First boss battle](https://i.imgur.com/hTfAIov.png)
 
 ### Installation Instructions
