@@ -4,10 +4,15 @@
 ### Description
 
 ### Installation Instructions
-
+* Clone this repository down to your desktop
+* Open it in the text editor of your choice
+* Navigate to it in your shell program
+* type in `npm install`
+* type in `npm run`
 
 ### Technology Needed
-
+* Node.js
+* Working internet connection
 
 ### Specs
 |Behavior|Input|Output|
@@ -25,24 +30,13 @@
 |Player can open inventory| collect item| Item added to inventory|
 
 ### Known Bugs
-
+No known bugs currently
 
 ### Contact Me
 You can reach me at adamtitus76@gmail.com or connect with me on [linkedin](www.linkedin.com/in/adam-titus-06740b149).
 #### Legal
 This is licensed under the MIT license
 
-Copyright (c) 2017 Twenty One Pilots Titus All Rights Reserved.
+Copyright (c) 2017 Adam Titus and James Osborn All Rights Reserved.
 
 _If you find a way to monetize this please contact the author_
-
-
-# NOTES
-<!-- * Special attacks
-* Balancing -->
-* UI
-<!-- * Random Name Generator -->
-<!-- * Encounter Message -->
-* win encouter message
-* ASCII Art
-* picture of enemy slides in when encounter message happens
