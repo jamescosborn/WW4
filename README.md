@@ -3,6 +3,31 @@
 
 ### Description
 
+_I do not know with what weapons World War III will be fought, but World War IV will be fought with sticks and stones._
+
+--Albert Einstein  
+
+At the dusk of the 21st century, humanity nearly destroyed itself in thermonuclear war. A nuclear winter swept the earth for over 20 years, and from the ashes arose a new people and a new age.  Man and beast melded into Centaurs, and a new struggle for power consumed the world.
+
+In WW4 the player will experience:
+
+
+* A random name generator at character creation  
+* 3 playable classes with unique special abilities:
+  __Gladiator__, __Hunter__, __Warlock__
+* 7 unique enemies
+* 5 unique bosses
+
+### Screenshots
+##### Title screen for WW4
+![Title screen for WW4](https://i.imgur.com/MxCozDM.png)
+
+##### Character creation
+![Character creation](https://i.imgur.com/EMl55FO.png)
+
+##### First boss battle
+![First boss battle](https://i.imgur.com/hTfAIov.png)
+
 ### Installation Instructions
 * Clone this repository down to your desktop
 * Open it in the text editor of your choice
@@ -12,7 +37,7 @@
 
 ### Technology Needed
 * Node.js
-* Working internet connection
+* Working internet connection  
 
 ### Specs
 |Behavior|Input|Output|
@@ -40,3 +65,14 @@ This is licensed under the MIT license
 Copyright (c) 2017 Adam Titus and James Osborn All Rights Reserved.
 
 _If you find a way to monetize this please contact the author_
+
+
+# NOTES
+<!-- * Special attacks
+* Balancing -->
+* UI
+<!-- * Random Name Generator -->
+<!-- * Encounter Message -->
+* win encouter message
+* ASCII Art
+* picture of enemy slides in when encounter message happens
